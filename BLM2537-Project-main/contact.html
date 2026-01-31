@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <script src="js/jquery-3.7.1.js"></script>
+    <script type="text/javascript" src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="nhomestyles.css">
+    <link rel="stylesheet" href="nanalyzestyles.css">
+    <link rel="stylesheet" href="profilemanegstyles.css">
+    <link rel="stylesheet" href="contactstyles.css">
+    <script src="nhomejs.js"></script>
+    <script src="nanalyzejs.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="popup-container">
+    <div class="popup-window">
+            <h2 id="pop-header">Add New Expense</h2>
+            
+            <form id="expenseForm">
+                
+                <input type="date" id="date" name="date" required placeholder="date: yyyy/mm/dd">
+                
+                
+                <input type="text" id="name" name="name" required placeholder="name"><br><br>
+                
+                
+                <input type="text" id="description" name="description" placeholder="description"><br><br>
+                
+                
+                <input type="text" id="category" name="category" required placeholder="category">
+                
+                
+                <input type="float" id="amount" name="amount" required placeholder="amount"><br><br>
+                <select id="profiles-popup" name="profile">
+                    <option value="default">Default Profile</option>
+                    <option value="profile1">Profile 1</option>
+                    <option value="profile2">Profile 2</option>
+                    <option value="profile3">Profile 3</option>
+                </select>
+                <button type="button" id="popup-cancel-button">Cancel</button>
+                <button type="submit" id="popup-add-button">Add Expense</button>
+            </form>
+        </div>
+        </div>
+     <div class="addprofilepopupcontainer">
+        <div class="addprofilepopup">
+            <h2 id="add-profile-header">Add New Profile</h2>
+            <form id="profileForm">
+                <input type="text" id="profilename" name="profilename" required placeholder="Profile Name"><br><br>
+                <button type="button" id="add-profile-cancel-button">Cancel</button>
+                <button type="submit" id="add-profile-add-button">Add Profile</button>
+            </form>
+        </div>
+     </div>   
+     <div class="delete-profile-popup-container">
+        <div class="delete-profile-popup">
+            <img src="resources/red-cropped-warning.png" alt="Warning" class="warning-icon">
+            <h2 id="delete-item-header">The Item Will be Permamently Deleted!</h2>
+            <form id="deleteForm">
+                <button type="button" id="delete-profile-cancel-button">Cancel</button>
+                <button type="submit" id="delete-profile-confirm-button">Delete</button>
+            </form>
+        </div>
+     </div>
+     
+    <nav class="navbar"> 
+        <ul class="navbar-menu">                                                                    
+            <li class="navbar-item"> 
+                <div class="home">
+                     <a href="home.html" class="navbar-link">
+                        <img src="resources/homev3.png" width="30px"></a> 
+                        <a href="home.html" class="navbar-link">Home</a> 
+                    </div> 
+                </li> 
+                 <li class="navbar-item"> 
+                    <div class="analyze"> 
+                        <a href="analyze.html" class="navbar-link">
+                            <img src="resources/piecharticonv2.png" width="30px"></a> 
+                            <a href="analyze.html" class="navbar-link">Analyze</a> 
+                        </div> 
+                    </li>
+                    <li class="navbar-item"> 
+                <div class="profilemaneg"> 
+                    <a href="profilemaneg.html" class="navbar-link">
+                        <img src="resources/usericonv2.png" width="30px"></a> 
+                        <a href="profilemaneg.html" class="navbar-link">Manage Profiles</a> 
+                    </div>
+                </li>
+                    <li class="navbar-item"> 
+                    <div class="analyze"> 
+                        <a href="contact.html" class="navbar-link">
+                            <img src="resources/contact.png" width="30px"></a> 
+                            <a href="contact.html" class="navbar-link">Contact</a> 
+                        </div> 
+                    </li>
+                      
+                    </ul>
+                 </nav>
+   
+    <main class="main-container">
+        <div class="myinfo">
+            <div class="contactheader">
+            <h1>Contact Us</h1>   
+            </div>
+                
+                <div class="sendwindow">
+            <div class="inputs-container">
+  <div class="row two-cols">
+    <div class="field">
+      <label for="firstName">First Name</label>
+      <input id="firstName" type="text" placeholder="First name" />
+    </div>
+
+    <div class="field">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" type="text" placeholder="Last name" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="example@mail.com" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="field">
+      <label for="phone">Phone Number</label>
+      <input id="phone" type="tel" placeholder="+90 5xx xxx xx xx" />
+    </div>
+  </div>
+
+  <div class="row message-row">
+    <div class="field">
+      <label for="message">Message</label>
+      <textarea id="message" rows="6" placeholder="Write your message..."></textarea>
+    </div>
+
+    <button type="button" class="send-btn" id="sendBtn">Send</button>
+  </div>
+</div>
+        </div>
+                
+            <div>
+            <div class="contactsholder">
+                <a href="https://github.com/OudaiAhmed144" target="_blank" class="contact-link"><img src="resources/githublogo.png" width="30px"></a>
+            <a href="https://www.linkedin.com/in/oudai-tarik-ahmed-b14b801b7/" target="_blank" class="contact-link"><img src="resources/linkedlogo.png" width="30px"></a>
+            </div>
+            </div>
+            
+        </div>
+    </main>
+    <script>
+  const sendBtn = document.getElementById("sendBtn");
+
+  sendBtn.addEventListener("click", () => {
+    document.getElementById("firstName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("message").value = "";
+    alert("Your message has been sent");
+  });
+</script>
+<script>
+        document.getElementById("add-profile-cancel-button").addEventListener("click", function() {
+            document.querySelector(".addprofilepopupcontainer").style.display = "none";
+                                });
+            document.getElementById("add-profile-add-button").addEventListener("click", function() {
+                if(Profiles.length >= 10){
+                    alert("Maximum number of profiles reached (10). Cannot add more profiles.");
+                    return;
+                }
+                else{
+                    const inputprofilename = document.getElementById("profilename");
+                    let today = Date.now();
+                    Profiles.push({'name': inputprofilename.value, 'lastupdate': today});
+                    localStorage.setItem("proofiles", JSON.stringify(Profiles));
+                    generateProfiles(Profiles);
+                }
+            document.querySelector(".addprofilepopupcontainer").style.display = "none";
+            
+            inputprofilename.value = "";
+                                });
+            document.getElementById("add-profile-button").addEventListener("click", function() {
+            document.querySelector(".addprofilepopupcontainer").style.display = "flex";
+                                });
+    </script>
+</body>
+</html>

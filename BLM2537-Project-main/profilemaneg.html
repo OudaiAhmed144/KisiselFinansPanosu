@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Profiles</title>
+    <script src="js/jquery-3.7.1.js"></script>
+    <script type="text/javascript" src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="nhomestyles.css">
+    <link rel="stylesheet" href="nanalyzestyles.css">
+    <link rel="stylesheet" href="profilemanegstyles.css">
+    <script src="nhomejs.js"></script>
+    <script src="nanalyzejs.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="popup-container">
+    <div class="popup-window">
+            <h2 id="pop-header">Add New Expense</h2>
+            
+            <form id="expenseForm">
+                
+                <input type="date" id="date" name="date" required placeholder="date: yyyy/mm/dd">
+                
+                
+                <input type="text" id="name" name="name" required placeholder="name"><br><br>
+                
+                
+                <input type="text" id="description" name="description" placeholder="description"><br><br>
+                
+                
+                <input type="text" id="category" name="category" required placeholder="category">
+                
+                
+                <input type="float" id="amount" name="amount" required placeholder="amount"><br><br>
+                <select id="profiles-popup" name="profile">
+                    <option value="default">Default Profile</option>
+                    <option value="profile1">Profile 1</option>
+                    <option value="profile2">Profile 2</option>
+                    <option value="profile3">Profile 3</option>
+                </select>
+                <button type="button" id="popup-cancel-button">Cancel</button>
+                <button type="submit" id="popup-add-button">Add Expense</button>
+            </form>
+        </div>
+        </div>
+     <div class="addprofilepopupcontainer">
+        <div class="addprofilepopup">
+            <h2 id="add-profile-header">Add New Profile</h2>
+            <form id="profileForm">
+                <input type="text" id="profilename" name="profilename" required placeholder="Profile Name"><br><br>
+                <button type="button" id="add-profile-cancel-button">Cancel</button>
+                <button type="submit" id="add-profile-add-button">Add Profile</button>
+            </form>
+        </div>
+     </div>   
+     <div class="delete-profile-popup-container">
+        <div class="delete-profile-popup">
+            <img src="resources/red-cropped-warning.png" alt="Warning" class="warning-icon">
+            <h2 id="delete-item-header">The Item Will be Permamently Deleted!</h2>
+            <form id="deleteForm">
+                <button type="button" id="delete-profile-cancel-button">Cancel</button>
+                <button type="submit" id="delete-profile-confirm-button">Delete</button>
+            </form>
+        </div>
+     </div>
+    <nav class="navbar"> 
+        <ul class="navbar-menu">                                                                    
+            <li class="navbar-item"> 
+                <div class="home">
+                     <a href="home.html" class="navbar-link">
+                        <img src="resources/homev3.png" width="30px"></a> 
+                        <a href="home.html" class="navbar-link">Home</a> 
+                    </div> 
+                </li> 
+        
+                 <li class="navbar-item"> 
+                    <div class="analyze"> 
+                        <a href="analyze.html" class="navbar-link">
+                            <img src="resources/piecharticonv2.png" width="30px"></a> 
+                            <a href="analyze.html" class="navbar-link">Analyze</a> 
+                        </div> 
+                    </li>
+                    <li class="navbar-item"> 
+                <div class="profilemaneg"> 
+                    <a href="profilemaneg.html" class="navbar-link">
+                        <img src="resources/usericonv2.png" width="30px"></a> 
+                        <a href="profilemaneg.html" class="navbar-link">Manage Profiles</a> 
+                    </div>
+                </li>
+                    <li class="navbar-item"> 
+                    <div class="analyze"> 
+                        <a href="contact.html" class="navbar-link">
+                            <img src="resources/contact.png" width="30px"></a> 
+                            <a href="contact.html" class="navbar-link">Contact</a> 
+                        </div> 
+                    </li> 
+                    </ul>
+                 </nav>
+  
+    <main>
+        <div class="lmain">
+            <nav class="profiles">
+        <div class="profilesheader">
+            <h2>Profiles</h2>
+        <button id="header-add-profile-button" class="icon-btn" onclick="openaddprofilepopup()"><img src="resources/addprofile.png" width="30px"></button>
+        </div>
+        
+        <ul id="profiles-menu">
+        </ul>
+        <!--<button id="add-profile-button">Add Profile</button>-->
+            </nav>
+        </div>
+        <div class="rmain">
+            <h1>Manage Profiles</h1>
+        <div class="container">
+            <table class="overview-table">
+                <thead>
+                    <tr >
+                        <th class="w3">ID</th>
+                        <th>Profile</th>
+                        <th>Last Update</th>
+                        <th class="w6"></th>
+                    </tr>
+                </thead>
+                <tbody id="ProfilesTablebody">
+                    
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </main>
+    <script>
+            
+
+            
+            document.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('profilecheckbox')) {
+                localStorage.setItem("selectedProfiles", JSON.stringify(getprofilestobeshown()));
+                console.log("Selected Profiles to save:", getprofilestobeshown());
+                
+            }
+            });
+            generateProfiles(Profiles);
+
+        </script>
+    <script>
+        console.log("Generating Profiles Table with Profiles:", Profiles);
+        generateProtfilesTable(Profiles);
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('delete-profile-button')) {
+                console.log("Delete Profile Button Clicked");
+                    document.querySelector(".delete-profile-popup-container").style.display = "flex";
+                document.getElementById("delete-profile-confirm-button").addEventListener("click", function() {
+                    document.querySelector(".delete-profile-popup-container").style.display = "none";
+                    const profileId = parseInt(event.target.getAttribute('data-profile-id'));
+                    deleteprofilebyid(profileId);
+                                });                
+                document.getElementById("delete-profile-cancel-button").addEventListener("click", function() {
+                    document.querySelector(".delete-profile-popup-container").style.display = "none";
+                });
+            }
+            
+        });
+        
+    </script>
+    <div class="footer-basic">
+        <footer>
+            <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+            <p class="copyright">Kişisel Finans Panosu © 2025</p>
+        </footer>
+    </div>
+</body>
+</html>

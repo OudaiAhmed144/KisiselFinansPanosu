@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze</title>
+    <script src="js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="nhomestyles.css">
+    <link rel="stylesheet" href="nanalyzestyles.css">
+    <script src="nhomejs.js"></script>
+    <script src="nanalyzejs.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.8.0/countUp.umd.min.js"></script>
+</head>
+<body>
+    <div class="popup-container">
+    <div class="popup-window">
+            <h2 id="pop-header">Add New Expense</h2>
+            
+            <form id="expenseForm">
+                
+                <input type="date" id="date" name="date" required placeholder="date: yyyy/mm/dd">
+                
+                
+                <input type="text" id="name" name="name" required placeholder="name"><br><br>
+                
+                
+                <input type="text" id="description" name="description" placeholder="description"><br><br>
+                
+                
+                <input type="text" id="category" name="category" required placeholder="category">
+                
+                
+                <input type="float" id="amount" name="amount" required placeholder="amount"><br><br>
+                <select id="profiles-popup" name="profile">
+                    <option value="default">Default Profile</option>
+                    <option value="profile1">Profile 1</option>
+                    <option value="profile2">Profile 2</option>
+                    <option value="profile3">Profile 3</option>
+                </select>
+                <button type="button" id="popup-cancel-button">Cancel</button>
+                <button type="submit" id="popup-add-button">Add Expense</button>
+            </form>
+        </div>
+        </div>
+     <div class="addprofilepopupcontainer">
+        <div class="addprofilepopup">
+            <h2 id="add-profile-header">Add New Profile</h2>
+            <form id="profileForm">
+                <input type="text" id="profilename" name="profilename" required placeholder="Profile Name"><br><br>
+                <button type="button" id="add-profile-cancel-button">Cancel</button>
+                <button type="submit" id="add-profile-add-button">Add Profile</button>
+            </form>
+        </div>
+     </div>   
+    <nav class="navbar"> 
+        <ul class="navbar-menu">                                                                    
+            <li class="navbar-item"> 
+                <div class="home">
+                     <a href="home.html" class="navbar-link">
+                        <img src="resources/homev3.png" width="30px"></a> 
+                        <a href="home.html" class="navbar-link">Home</a> 
+                    </div> 
+                </li> 
+                 <li class="navbar-item"> 
+                    <div class="analyze"> 
+                        <a href="analyze.html" class="navbar-link">
+                            <img src="resources/piecharticonv2.png" width="30px"></a> 
+                            <a href="analyze.html" class="navbar-link">Analyze</a> 
+                        </div> 
+                    </li>
+                    <li class="navbar-item"> 
+                <div class="profilemaneg"> 
+                    <a href="profilemaneg.html" class="navbar-link">
+                        <img src="resources/usericonv2.png" width="30px"></a> 
+                        <a href="profilemaneg.html" class="navbar-link">Manage Profiles</a> 
+                    </div>
+                </li>
+                    <li class="navbar-item"> 
+                    <div class="analyze"> 
+                        <a href="contact.html" class="navbar-link">
+                            <img src="resources/contact.png" width="30px"></a> 
+                            <a href="contact.html" class="navbar-link">Contact</a> 
+                        </div> 
+                    </li>
+                     <button id="add-expense-button">Add New Expense</button> 
+                    </ul>
+                 </nav>
+    
+
+
+    <main>
+    <div class="lmain">
+            <nav class="profiles">
+        <div class="profilesheader">
+            <h2>Profiles</h2>
+        <button id="header-add-profile-button" class="icon-btn" onclick="openaddprofilepopup()"><img src="resources/addprofile.png" width="30px"></button>
+        </div>
+        
+        <ul id="profiles-menu">
+        </ul>
+        <!--<button id="add-profile-button">Add Profile</button>-->
+            </nav>
+        </div>
+    <div class="rmain">
+    <div class="chartscontainer"> 
+        <div class="pie">
+            <canvas id="categorypie"></canvas>
+        </div>
+        <div class="horibar">
+            <canvas id="horibar"></canvas>
+        </div>
+        <div class="stats">
+            <h2>Expense Statistics</h2>
+            <div><span id='totalEx'></span>
+                <h3 class="toth">Total Expenses</h3>
+            </div>
+            <div><span id='avpday'></span>
+                <h3 class="avgh">Average Expense per Day</h3>
+            </div>
+        </div>
+    </div>
+    <div class="lbcontainer">   
+        <div class="bar">
+            <canvas id="expenseByWeekdayChart"></canvas>
+        </div>
+        <div class="line">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+    </div>
+    </main>
+    <script>
+            
+
+            document.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('profilecheckbox')) {
+                localStorage.setItem("selectedProfiles", JSON.stringify(getprofilestobeshown()));
+                console.log("Selected Profiles to save:", getprofilestobeshown());
+            }
+            });
+            document.getElementById("popup-cancel-button").addEventListener("click", function() {
+            document.querySelector(".popup-container").style.display = "none";
+                                });
+            document.getElementById("add-expense-button").addEventListener("click", function() {
+            document.querySelector(".popup-container").style.display = "flex";
+            console.log("Add Expense button clicked");
+                                });
+            document.getElementById("popup-add-button").addEventListener("click", function() {
+            document.querySelector(".popup-container").style.display = "none";
+                                });
+
+        const inputname = document.getElementById("name");
+        const inputamount = document.getElementById("amount");
+        const inputdate = document.getElementById("date");
+        const inputcategory = document.getElementById("category");
+        const inputdescription = document.getElementById("description");
+        const inputprofile = document.getElementById("profiles-popup");
+        document.getElementById("expenseForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const name = inputname.value;
+            const amount = parseFloat(inputamount.value);
+            const date = inputdate.value;
+            const category = inputcategory.value;
+            const description = inputdescription.value;
+            const profile = inputprofile.value;
+            const newExpense = {
+                date: date,
+                name: name,
+                description: description,
+                category: category,
+                amount: amount,
+                profile: profile,
+                id: Date.now()
+            };
+            arrofobj = JSON.parse(localStorage.getItem(profile));
+            if (arrofobj == null) {
+                arrofobj = [];
+            }
+            arrofobj.push(newExpense);
+            localStorage.setItem(profile, JSON.stringify(arrofobj));
+            console.log("New Expense Added:", newExpense);
+            document.querySelector(".popup-container").style.display = "none";
+            inputname.value = "";
+            inputamount.value = "";
+            inputdate.value = "";
+            inputcategory.value = "";
+            inputdescription.value = "";
+            });
+            document.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('profilecheckbox')) {
+                localStorage.setItem("selectedProfiles", JSON.stringify(getprofilestobeshown()));
+                console.log("Selected Profiles to save:", getprofilestobeshown());
+                
+            }
+            });
+            generateProfiles(Profiles);
+
+        </script>
+    <script>
+        allitems = getallitemstobeshown(getprofilestobeshown());
+        console.log("All items for analysis:", allitems);
+        const pieCtx = document.getElementById('categorypie').getContext('2d');
+        var keysofcategory, vofcategory  = reduceByCategory(allitems);
+        console.log("koc", keysofcategory);
+        console.log("voc", vofcategory);
+        createpieChart(keysofcategory, vofcategory, pieCtx);
+        const horibarCtx = document.getElementById('horibar').getContext('2d');
+        createhorizontalBarChart(keysofcategory, vofcategory, horibarCtx);
+        var keysofdate, vofdate = reduceByDate(allitems);
+        var expensesbyweekday = getvaluesforweekdays(keysofdate, vofdate);
+        const expenseByWeekdayCtx = document.getElementById('expenseByWeekdayChart').getContext('2d');
+        createweeklyBarChart(expensesbyweekday, expenseByWeekdayCtx);
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        createlineChart(keysofdate, vofdate, lineCtx);
+        const firstday = keysofdate[0];
+        const lastday = keysofdate[keysofdate.length - 1];
+        daysbetween = getDaysBetween(firstday, lastday)+1;
+        let totalExpenses = 0;
+        let highestExpense = 0;
+        let lowestExpense = Infinity;
+
+        allitems.forEach(expense => {
+            const amount = parseFloat(expense.amount);
+            totalExpenses += amount;
+            if (amount > highestExpense) {
+                highestExpense = amount;
+            }
+            if (amount < lowestExpense) {
+                lowestExpense = amount;
+            }
+        });
+        const averageperday = totalExpenses / daysbetween;
+        runCounterAnimation("totalEx", totalExpenses);
+        runCounterAnimation("avpday", averageperday);
+    </script>
+    <div class="footer-basic">
+        <footer>
+            <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+            <p class="copyright">Kişisel Finans Panosu © 2025</p>
+        </footer>
+    </div>
+
+</body>
+</html>

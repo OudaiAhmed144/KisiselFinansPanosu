@@ -1,0 +1,85 @@
+.main-container {
+    display: flex;          /* puts children side by side */
+    max-width: calc(100vw-200px);           /* fill available horizontal space */
+    
+    height: calc(100vh - 200px);              /* fill vertical space */
+    position: fixed;
+    bottom: 0;
+    top: 100px;
+    
+}
+.main-container > div {
+    width: 100%;             /* each takes exactly half */
+}
+
+
+.inputs-container {
+    width: 100%;           /* change this as you like */
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .row {
+    width: 100%;            /* every row same width */
+  }
+
+  .two-cols {
+    display: flex;
+    gap: 12px;
+  }
+
+  .two-cols .field {
+    flex: 1;                /* first + last share row equally */
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;            /* makes rows same width */
+    padding: 10px 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  .message-row {
+    position: relative;     /* lets the button sit in bottom-right */
+    padding-bottom: 44px;   /* space so button doesn't overlap textarea text */
+  }
+
+  .send-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .contactsholder{
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+.myinfo{
+    height: 100%;
+    
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    margin-left: 100px;
+    
+
+}
+
